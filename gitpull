@@ -1,0 +1,28 @@
+#!/bin/bash
+
+remotes=($(git remote))
+IFS=$'\n'
+branches=($(git branch -vvv | sed -r 's/^\s+//'))
+cnt=${#branches[@]}
+
+if [ $cnt -eq 0 ]; then
+    echo "No branches found. Maybe it is not a git repository?"
+    exit
+fi
+
+for br in ${branches[@]}; do
+    if [[ ${br} =~ ^\* ]]; then
+        br=${br:2}
+        actual=$br
+    fi
+    brName=${br%% *}
+    for r in ${remotes[@]}; do
+        if [[ ${br} =~ ^[^\ ]+\ +[^\ ]+\ +\[${r}/[^\ ]+\]\  ]]; then
+            git checkout $brName
+            git pull
+        fi
+    done
+done
+
+git checkout ${actual%% *}
+

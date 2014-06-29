@@ -1,0 +1,25 @@
+#!/bin/bash
+
+IFS=$'\n'
+branches=($(git branch -vvv | sed -r 's/^\s+//'))
+branches=(${branches[@]## })
+cnt=${#branches[@]}
+
+if [ $cnt -eq 0 ]; then
+    echo "No branches found. Maybe it is not a git repository?"
+    exit
+fi
+
+for i in `seq 0 $[cnt-1]`; do
+    [ $cnt -gt 100 ] && [ $i -lt 100 ] && echo -n ' '
+    [ $cnt -gt 10 ] && [ $i -lt 10 ] && echo -n ' '
+    echo "$i   ${branches[$i]}" | sed -r 's/  \*/>/'
+done
+read -p "Which one do you want to switch to? " brid
+[ -z "$brid" ] && exit
+
+IFS=' '
+branchInfo=(${branches[$brid]})
+branch=${branchInfo[0]}
+git checkout ${branch}
+
