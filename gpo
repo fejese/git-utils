@@ -1,0 +1,6 @@
+#!/bin/bash
+
+. ${BASH_SOURCE[0]%/*}/gitlib.sh
+
+git push origin $(git-branch-name)
+
