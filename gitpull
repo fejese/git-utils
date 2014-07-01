@@ -17,7 +17,7 @@ for br in ${branches[@]}; do
     fi
     brName=${br%% *}
     for r in ${remotes[@]}; do
-        if [[ ${br} =~ ^[^\ ]+\ +[^\ ]+\ +\[${r}/[^\ ]+\]\  ]]; then
+        if grep -qP '^([^ ]+) +[^ ]+ +\[origin/\1\b' <<< $br; then
             git checkout $brName
             git pull
         fi
