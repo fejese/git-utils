@@ -2,5 +2,7 @@
 
 . ${BASH_SOURCE[0]%/*}/gitlib.sh
 
-git push origin $(git-branch-name)
+: ${GIT_OPTS:=$*}
+
+git push ${GIT_OPTS} origin $(git-branch-name)
 
